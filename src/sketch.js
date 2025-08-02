@@ -8,6 +8,7 @@ export const mySketch = (p) => {
   // parameters
   // ... visual
   const SCALE = 1.0; // global scale
+  let saveBtn2;
 
   // ... physics
   const PERIOD = 1.0; // spin period
@@ -33,36 +34,39 @@ export const mySketch = (p) => {
 
   let model = undefined;
 
-  const makeCurrentSheet = (rmax, nr, nphi) => new p5.Geometry(
-    1, 1,
-    function createGeometry() {
-      const phis = linspace(0.0, 2.0 * Math.PI, nphi);
-      const radii = linspace(0.0, rmax, nr);
-      const points = phis.map(ang => radii.map(t => p5.Vector.mult(p5.Vector.add(p5.Vector.mult(vA(-t), Math.cos(ang)), p5.Vector.mult(vB(-t), Math.sin(ang))), RLC * (1.0 + t))));
-      this.vertices.push(
-        ...[].concat.apply([], points)
-      );
-      const npoints = nr * nphi;
-      for (let j = 0; j < nphi; j++) {
-        for (let i = 0; i < nr - 1; i++) {
-          let I = i + j * nr;
-          this.faces.push([I % npoints, (I + 1) % npoints, (nr + I) % npoints]);
-          this.faces.push([(nr + I) % npoints, (I + 1) % npoints, (nr + I + 1) % npoints]);
+  const makeCurrentSheet = (rmax, nr, nphi) => {
+    p.beginGeometry();
+    const geometry = p.endGeometry();
+        const phis = linspace(0.0, 2.0 * Math.PI, nphi);
+        const radii = linspace(0.0, rmax, nr);
+        const points = phis.map(ang => radii.map(t => p5.Vector.mult(p5.Vector.add(p5.Vector.mult(vA(-t), Math.cos(ang)), p5.Vector.mult(vB(-t), Math.sin(ang))), RLC * (1.0 + t))));
+        geometry.vertices.push(
+          ...[].concat.apply([], points)
+        );
+        const npoints = nr * nphi;
+        for (let j = 0; j < nphi; j++) {
+          for (let i = 0; i < nr - 1; i++) {
+            let I = i + j * nr;
+            geometry.faces.push([I % npoints, (I + 1) % npoints, (nr + I) % npoints]);
+            geometry.faces.push([(nr + I) % npoints, (I + 1) % npoints, (nr + I + 1) % npoints]);
+          }
         }
-      }
-
-      this.computeNormals();
-      this.gid = 'tri';
-    }
-  );
+        geometry.computeNormals();
+        geometry.gid = 'tri';
+    return geometry;
+  }
 
   p.preload = () => {
-    model = makeCurrentSheet(2.0, 1000, 100);
   }
 
   p.setup = () => {
     p.createCanvas(window.innerWidth, window.innerHeight, p.WEBGL);
+    model = makeCurrentSheet(1.5, 1000, 100);
     p.perspective(1.1, p.width / p.height, 0.1, 50000);
+    saveBtn2 = p.createButton('Save binary .stl');
+    saveBtn2.mousePressed(function() {
+      model.saveStl('model.stl', { binary: true });
+    });
   }
 
   p.draw = () => {

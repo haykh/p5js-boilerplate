@@ -13,9 +13,7 @@ export default class World {
 
   private _simulation: Simulation;
 
-  constructor() {}
-
-  start(container: string, ctx: p5, simulation: Simulation) {
+  setup(container: string, ctx: p5, simulation: Simulation) {
     const container_element = document.querySelector(container);
     if (container_element === null) {
       throw new Error("Canvas container not found");

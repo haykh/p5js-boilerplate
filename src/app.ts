@@ -7,7 +7,7 @@ const sketch = (ctx: p5) => {
   const sim = new TestSimulation();
 
   ctx.setup = () => {
-    world.start("#p5canvas", ctx, sim);
+    world.setup("#p5canvas", ctx, sim);
   };
 
   ctx.draw = () => {

@@ -9,6 +9,8 @@ import { Color } from "./Utils";
 
 export default class World {
   public canvas: p5.Element;
+  public width: number;
+  public height: number;
 
   public engine: Matter.Engine;
   public runner: Matter.Runner;
@@ -23,25 +25,26 @@ export default class World {
     if (container_element === null) {
       throw new Error("Canvas container not found");
     }
+    this.width = container_element.clientWidth;
+    this.height = container_element.clientHeight;
     this.canvas = ctx
-      .createCanvas(
-        container_element.clientWidth,
-        container_element.clientHeight,
-      )
+      .createCanvas(this.width, this.height)
       .parent(container_element);
 
     this.engine = Matter.Engine.create();
     this.world = this.engine.world;
     this.runner = Matter.Runner.create();
 
+    const gap = 20;
+
     this.drawables.push(
       new Ground({
         points: [
-          { x: 0, y: 300 },
-          { x: 200, y: 250 },
-          { x: 400, y: 300 },
-          { x: 600, y: 350 },
-          { x: 800, y: 300 },
+          { x: gap, y: this.height - gap },
+          { x: this.width - gap, y: this.height - gap },
+          { x: this.width - gap, y: gap },
+          { x: gap, y: gap },
+          { x: gap, y: this.height - gap },
         ],
         color: new Color({ r: 100, g: 200, b: 100 }),
         thickness: 5,
@@ -50,19 +53,21 @@ export default class World {
         center: { x: 300, y: 100 },
         width: 50,
         height: 50,
+        angle: Math.PI / 6,
       }),
       new Box({
         center: { x: 400, y: 50 },
         width: 50,
         height: 50,
+        angle: -Math.PI / 6,
       }),
       new Polygon({
         points: [
-          { x: 500, y: 0 },
-          { x: 550, y: 50 },
-          { x: 525, y: 100 },
-          { x: 475, y: 100 },
-          { x: 450, y: 50 },
+          { x: 400, y: 200 },
+          { x: 450, y: 250 },
+          { x: 425, y: 300 },
+          { x: 375, y: 300 },
+          { x: 350, y: 250 },
         ],
         color: new Color({ r: 200, g: 100, b: 100 }),
       }),

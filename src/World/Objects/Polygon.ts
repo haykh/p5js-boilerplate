@@ -1,12 +1,13 @@
 import type p5 from "p5";
 import type { Coordinate } from "../Utils";
-import { Bodies } from "matter-js";
+import { Body, Bodies } from "matter-js";
 import Drawable from "./Drawable";
 import { Color } from "../Utils";
 
 interface PolygonOptions {
   points: Array<Coordinate>;
   color?: Color;
+  density?: number;
 }
 
 export default class Polygon extends Drawable {
@@ -30,6 +31,9 @@ export default class Polygon extends Drawable {
     }));
 
     this.bodies.push(Bodies.fromVertices(center.x, center.y, [vertices]));
+    if (opts.density !== undefined) {
+      Body.setDensity(this.bodies[0], opts.density);
+    }
   }
 
   draw(ctx: p5) {

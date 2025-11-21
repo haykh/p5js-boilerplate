@@ -1,14 +1,16 @@
 import type p5 from "p5";
-import { Bodies } from "matter-js";
+import type { Coordinate } from "../Utils";
+import { Body, Bodies } from "matter-js";
 import Drawable from "./Drawable";
 import { Color } from "../Utils";
 
 interface BoxOptions {
-  center: { x: number; y: number };
+  center: Coordinate;
   width: number;
   height: number;
   angle?: number;
   color?: Color;
+  density?: number;
 }
 
 export default class Ground extends Drawable {
@@ -25,6 +27,9 @@ export default class Ground extends Drawable {
         angle: opts.angle || 0,
       }),
     );
+    if (opts.density !== undefined) {
+      Body.setDensity(this.bodies[0], opts.density);
+    }
   }
 
   draw(ctx: p5) {

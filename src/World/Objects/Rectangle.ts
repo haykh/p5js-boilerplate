@@ -1,8 +1,8 @@
 import type p5 from "p5";
-import type { Vector } from "../Utils";
+import type { Vector } from "../Common";
 import { Bodies } from "matter-js";
 import { PhysicalObject, PhysicalObjectOptions } from "./Common";
-import { Color } from "../Utils";
+import { Color } from "../Common";
 
 interface RectangleOptions extends PhysicalObjectOptions {
   points: Array<Vector>;

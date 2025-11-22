@@ -1,6 +1,6 @@
 import { Body } from "matter-js";
 import type p5 from "p5";
-import { Vector, Color } from "../Utils";
+import { Vector, Color } from "../Common";
 
 interface DrawableOptions {
   color?: Color;

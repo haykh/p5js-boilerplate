@@ -3,7 +3,7 @@ import { Body, Events } from "matter-js";
 import Simulation from "../Simulation";
 import Rectangle from "../Objects/Rectangle.ts";
 import Ball from "../Objects/Ball";
-import { Color } from "../Utils";
+import { Color } from "../Common";
 
 export default class GasSimulation extends Simulation {
   create(world: World) {

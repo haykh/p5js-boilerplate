@@ -5,7 +5,7 @@ import Box from "../Objects/Box";
 import Polygon from "../Objects/Polygon";
 import { Color } from "../Common";
 
-export default class TestSimulation extends Simulation {
+export default class SoftbodySimulation extends Simulation {
   create(world: World) {
     super.create(world);
     const gap = 20;

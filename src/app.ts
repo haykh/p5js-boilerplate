@@ -1,7 +1,9 @@
 import p5 from "p5";
+import { GetNativeFPS, DrawStats } from "./World/Utils";
 import World from "./World/World";
-import Simulation from "./World/Simulations/Test";
+// import Simulation from "./World/Simulations/Test";
 // import Simulation from "./World/Simulations/Gas";
+import Simulation from "./World/Simulations/SoftBody";
 
 document.addEventListener(
   "DOMContentLoaded",
@@ -12,15 +14,15 @@ document.addEventListener(
 
       ctx.setup = () => {
         world.setup("#p5canvas", ctx, sim);
+        GetNativeFPS().then((fps) => {
+          ctx.frameRate(fps);
+        });
       };
 
       ctx.draw = () => {
         ctx.clear();
         world.draw(ctx);
-        // write the fps to the top-left corner
-        ctx.fill(255);
-        ctx.textSize(16);
-        ctx.text(`FPS: ${ctx.frameRate().toFixed(2)}`, 10, 20);
+        DrawStats(ctx);
       };
     };
     new p5(sketch);

@@ -1,6 +1,6 @@
 import type World from "../World";
 import Simulation from "../Simulation";
-import Ground from "../Objects/Ground";
+import Rectangle from "../Objects/Rectangle";
 import Box from "../Objects/Box";
 import Polygon from "../Objects/Polygon";
 import { Color } from "../Utils";
@@ -11,7 +11,7 @@ export default class TestSimulation extends Simulation {
     const gap = 20;
 
     this.drawables.push(
-      new Ground({
+      new Rectangle({
         points: [
           { x: gap, y: world.height - gap },
           { x: world.width - gap, y: world.height - gap },
@@ -21,6 +21,7 @@ export default class TestSimulation extends Simulation {
         ],
         color: new Color({ r: 100, g: 200, b: 100 }),
         thickness: 5,
+        static: true,
       }),
       new Box({
         center: { x: 300, y: 100 },

@@ -1,7 +1,7 @@
 import p5 from "p5";
 import World from "./World/World";
-// import Simulation from "./World/Simulations/Test";
-import Simulation from "./World/Simulations/Gas";
+import Simulation from "./World/Simulations/Test";
+// import Simulation from "./World/Simulations/Gas";
 
 document.addEventListener(
   "DOMContentLoaded",

@@ -36,16 +36,13 @@ export default class Box extends Drawable {
     if (this.composite.bodies.length === 0) {
       return;
     }
+    const body = this.composite.bodies[0];
     ctx.push();
     {
-      ctx.translate(
-        this.composite.bodies[0].position.x,
-        this.composite.bodies[0].position.y,
-      );
-      ctx.rotate(this.composite.bodies[0].angle);
+      this.pushStyle(ctx, 0);
+      ctx.translate(body.position.x, body.position.y);
+      ctx.rotate(body.angle);
       ctx.rectMode(ctx.CENTER);
-      ctx.noStroke();
-      ctx.fill(this.color.r, this.color.g, this.color.b, this.color.a);
       ctx.rect(0, 0, this.width, this.height);
     }
     ctx.pop();

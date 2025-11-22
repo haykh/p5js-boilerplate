@@ -39,22 +39,14 @@ export default class Polygon extends Drawable {
     if (this.composite.bodies.length === 0) {
       return;
     }
+    const body = this.composite.bodies[0];
     ctx.push();
     {
-      ctx.translate(
-        this.composite.bodies[0].position.x,
-        this.composite.bodies[0].position.y,
-      );
+      this.pushStyle(ctx, 0);
+      ctx.translate(body.position.x, body.position.y);
       ctx.beginShape();
-      ctx.noStroke();
-      ctx.fill(this.color.r, this.color.g, this.color.b, this.color.a);
-      (
-        this.composite.bodies[0].vertices as Array<{ x: number; y: number }>
-      ).forEach((vertex) => {
-        ctx.vertex(
-          vertex.x - this.composite.bodies[0].position.x,
-          vertex.y - this.composite.bodies[0].position.y,
-        );
+      (body.vertices as Array<{ x: number; y: number }>).forEach((vertex) => {
+        ctx.vertex(vertex.x - body.position.x, vertex.y - body.position.y);
       });
       ctx.endShape(ctx.CLOSE);
     }

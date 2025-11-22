@@ -32,14 +32,11 @@ export default class Ball extends Drawable {
     if (this.composite.bodies.length === 0) {
       return;
     }
+    const body = this.composite.bodies[0];
     ctx.push();
     {
-      ctx.translate(
-        this.composite.bodies[0].position.x,
-        this.composite.bodies[0].position.y,
-      );
-      ctx.noStroke();
-      ctx.fill(this.color.r, this.color.g, this.color.b, this.color.a);
+      this.pushStyle(ctx, 0);
+      ctx.translate(body.position.x, body.position.y);
       ctx.circle(0, 0, 2 * this.radius);
     }
     ctx.pop();

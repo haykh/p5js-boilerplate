@@ -1,9 +1,9 @@
 import p5 from "p5";
 import { GetNativeFPS, DrawStats } from "./World/Utils";
 import World from "./World/World";
-import Simulation from "./World/Simulations/Test";
+// import Simulation from "./World/Simulations/Test";
 // import Simulation from "./World/Simulations/Gas";
-// import Simulation from "./World/Simulations/SoftBody";
+import Simulation from "./World/Simulations/Softbody";
 
 document.addEventListener(
   "DOMContentLoaded",

@@ -3,19 +3,17 @@ import type { Vector } from "../Common";
 import type { DrawableOptions } from "./Drawable";
 import { Bodies, Composite } from "matter-js";
 import Drawable from "./Drawable";
-import { Color } from "../Common";
 
-interface RectangleOptions extends DrawableOptions {
+interface LinesOptions extends DrawableOptions {
   points: Array<Vector>;
   thickness: number;
 }
 
-export default class Rectangle extends Drawable {
+export default class Lines extends Drawable {
   private lengths: Array<number> = [];
   private thicknesses: Array<number> = [];
-  public color: Color;
 
-  constructor(opts: RectangleOptions) {
+  constructor(opts: LinesOptions) {
     super(opts);
 
     for (let i = 0; i < opts.points.length - 1; i++) {
@@ -56,11 +54,11 @@ export default class Rectangle extends Drawable {
     {
       ctx.rectMode(ctx.CENTER);
       ctx.noStroke();
-      ctx.fill(this.color.r, this.color.g, this.color.b, this.color.a);
 
       this.composite.bodies.forEach((body, index) => {
         ctx.push();
         {
+          this.pushStyle(ctx, index);
           ctx.translate(body.position.x, body.position.y);
           ctx.rotate(body.angle);
           ctx.rect(0, 0, this.lengths[index], this.thicknesses[index]);

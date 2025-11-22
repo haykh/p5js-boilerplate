@@ -1,7 +1,7 @@
 import type World from "../World";
 import { Body } from "matter-js";
 import Simulation from "../Simulation";
-import Rectangle from "../Objects/Rectangle";
+import Lines from "../Objects/Lines";
 import Ball from "../Objects/Ball";
 import Box from "../Objects/Box";
 import Polygon from "../Objects/Polygon";
@@ -13,7 +13,7 @@ export default class TestSimulation extends Simulation {
     const gap = 20;
 
     this.drawables.push(
-      new Rectangle({
+      new Lines({
         points: [
           { x: gap, y: world.height - gap },
           { x: world.width - gap, y: world.height - gap },
@@ -21,7 +21,7 @@ export default class TestSimulation extends Simulation {
           { x: gap, y: gap },
           { x: gap, y: world.height - gap },
         ],
-        color: new Color({ r: 100, g: 200, b: 100 }),
+        colors: [new Color({ r: 100, g: 200, b: 100 })],
         thickness: 5,
         body_options: {
           isStatic: true,
@@ -49,7 +49,7 @@ export default class TestSimulation extends Simulation {
       new Ball({
         center: { x: 700, y: 150 },
         radius: 30,
-        color: new Color({ r: 100, g: 100, b: 200 }),
+        colors: [new Color({ r: 100, g: 100, b: 200 })],
         body_options: {
           density: 10,
           restitution: 1.0,
@@ -66,7 +66,7 @@ export default class TestSimulation extends Simulation {
           { x: 375, y: 300 },
           { x: 350, y: 250 },
         ],
-        color: new Color({ r: 200, g: 100, b: 100 }),
+        colors: [new Color({ r: 200, g: 100, b: 100 })],
         body_options: {
           angle: Math.PI / 4,
         },

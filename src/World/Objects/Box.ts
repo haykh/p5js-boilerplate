@@ -1,15 +1,16 @@
 import type p5 from "p5";
 import type { Vector } from "../Common";
-import { Bodies } from "matter-js";
-import { PhysicalObject, PhysicalObjectOptions } from "./Common";
+import type { DrawableOptions } from "./Drawable";
+import { Bodies, Composite } from "matter-js";
+import Drawable from "./Drawable";
 
-interface BoxOptions extends PhysicalObjectOptions {
+interface BoxOptions extends DrawableOptions {
   center: Vector;
   width: number;
   height: number;
 }
 
-export default class Box extends PhysicalObject {
+export default class Box extends Drawable {
   public width: number;
   public height: number;
 
@@ -18,20 +19,30 @@ export default class Box extends PhysicalObject {
     this.width = opts.width;
     this.height = opts.height;
 
-    this.bodies.push(
-      Bodies.rectangle(opts.center.x, opts.center.y, this.width, this.height),
+    Composite.add(
+      this.composite,
+      Bodies.rectangle(
+        opts.center.x,
+        opts.center.y,
+        this.width,
+        this.height,
+        opts.body_options,
+      ),
     );
     super.initialize();
   }
 
   draw(ctx: p5) {
-    if (this.bodies.length === 0) {
+    if (this.composite.bodies.length === 0) {
       return;
     }
     ctx.push();
     {
-      ctx.translate(this.bodies[0].position.x, this.bodies[0].position.y);
-      ctx.rotate(this.bodies[0].angle);
+      ctx.translate(
+        this.composite.bodies[0].position.x,
+        this.composite.bodies[0].position.y,
+      );
+      ctx.rotate(this.composite.bodies[0].angle);
       ctx.rectMode(ctx.CENTER);
       ctx.noStroke();
       ctx.fill(this.color.r, this.color.g, this.color.b, this.color.a);

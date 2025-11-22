@@ -1,13 +1,14 @@
 import type p5 from "p5";
 import type { Vector } from "../Common";
-import { Bodies } from "matter-js";
-import { PhysicalObject, PhysicalObjectOptions } from "./Common";
+import type { DrawableOptions } from "./Drawable";
+import { Bodies, Composite } from "matter-js";
+import Drawable from "./Drawable";
 
-interface PolygonOptions extends PhysicalObjectOptions {
+interface PolygonOptions extends DrawableOptions {
   points: Array<Vector>;
 }
 
-export default class Polygon extends PhysicalObject {
+export default class Polygon extends Drawable {
   constructor(opts: PolygonOptions) {
     super(opts);
 
@@ -27,28 +28,34 @@ export default class Polygon extends PhysicalObject {
       y: point.y - center.y,
     }));
 
-    this.bodies.push(Bodies.fromVertices(center.x, center.y, [vertices]));
+    Composite.add(
+      this.composite,
+      Bodies.fromVertices(center.x, center.y, [vertices], opts.body_options),
+    );
     super.initialize();
   }
 
   draw(ctx: p5) {
-    if (this.bodies.length === 0) {
+    if (this.composite.bodies.length === 0) {
       return;
     }
     ctx.push();
     {
-      ctx.translate(this.bodies[0].position.x, this.bodies[0].position.y);
+      ctx.translate(
+        this.composite.bodies[0].position.x,
+        this.composite.bodies[0].position.y,
+      );
       ctx.beginShape();
       ctx.noStroke();
       ctx.fill(this.color.r, this.color.g, this.color.b, this.color.a);
-      (this.bodies[0].vertices as Array<{ x: number; y: number }>).forEach(
-        (vertex) => {
-          ctx.vertex(
-            vertex.x - this.bodies[0].position.x,
-            vertex.y - this.bodies[0].position.y,
-          );
-        },
-      );
+      (
+        this.composite.bodies[0].vertices as Array<{ x: number; y: number }>
+      ).forEach((vertex) => {
+        ctx.vertex(
+          vertex.x - this.composite.bodies[0].position.x,
+          vertex.y - this.composite.bodies[0].position.y,
+        );
+      });
       ctx.endShape(ctx.CLOSE);
     }
     ctx.pop();

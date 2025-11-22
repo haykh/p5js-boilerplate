@@ -19,7 +19,9 @@ export default class GasSimulation extends Simulation {
       ],
       color: new Color({ r: 100, g: 200, b: 100 }),
       thickness: 5,
-      static: true,
+      body_options: {
+        isStatic: true,
+      },
     });
 
     const right_wall = new Rectangle({
@@ -29,7 +31,9 @@ export default class GasSimulation extends Simulation {
       ],
       color: new Color({ r: 100, g: 200, b: 100 }),
       thickness: 5,
-      static: true,
+      body_options: {
+        isStatic: true,
+      },
     });
 
     const top_wall = new Rectangle({
@@ -39,7 +43,9 @@ export default class GasSimulation extends Simulation {
       ],
       color: new Color({ r: 100, g: 200, b: 100 }),
       thickness: 5,
-      static: true,
+      body_options: {
+        isStatic: true,
+      },
     });
 
     const bottom_wall = new Rectangle({
@@ -49,7 +55,9 @@ export default class GasSimulation extends Simulation {
       ],
       color: new Color({ r: 100, g: 200, b: 100 }),
       thickness: 5,
-      static: true,
+      body_options: {
+        isStatic: true,
+      },
     });
 
     const particles = Array.from({ length: 200 }, () => {
@@ -58,15 +66,19 @@ export default class GasSimulation extends Simulation {
           x: Math.random() * (world.width - 6 * gap) + 3 * gap,
           y: Math.random() * (world.height - 2 * gap) + gap,
         },
-        velocity: {
-          x: (Math.random() - 0.5) * 1,
-          y: (Math.random() - 0.5) * 1,
-        },
         radius: 15,
         color: new Color({ r: 200, g: 100, b: 100 }),
-        friction: 0,
-        frictionAir: 0,
-        restitution: 1,
+        body_options: {
+          friction: 0,
+          frictionAir: 0,
+          restitution: 1,
+        },
+        body_init_callback: (body) => {
+          Body.setVelocity(body, {
+            x: (Math.random() - 0.5) * 1,
+            y: (Math.random() - 0.5) * 1,
+          });
+        },
       });
     });
 
@@ -82,7 +94,7 @@ export default class GasSimulation extends Simulation {
       const t = this._world.engine.timing.timestamp;
       const hot_freq = 0.01;
       const cold_freq = 0.001;
-      left_wall.bodies.forEach((body) => {
+      left_wall.composite.bodies.forEach((body) => {
         Body.setPosition(body, {
           x: gap * (2 + Math.cos(hot_freq * t)),
           y: world.height / 2,
@@ -92,7 +104,7 @@ export default class GasSimulation extends Simulation {
           y: 0,
         });
       });
-      right_wall.bodies.forEach((body) => {
+      right_wall.composite.bodies.forEach((body) => {
         Body.setPosition(body, {
           x: world.width - gap * (2 + Math.cos(cold_freq * t)),
           y: world.height / 2,
@@ -108,8 +120,8 @@ export default class GasSimulation extends Simulation {
           new Color({ r: 0, g: 0, b: 255 }),
           new Color({ r: 255, g: 0, b: 0 }),
           Math.hypot(
-            particle.bodies[0].velocity.x,
-            particle.bodies[0].velocity.y,
+            particle.composite.bodies[0].velocity.x,
+            particle.composite.bodies[0].velocity.y,
           ) / 5,
         );
       });

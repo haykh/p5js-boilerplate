@@ -1,5 +1,5 @@
 import type p5 from "p5";
-import type { Drawable } from "./Objects/Common";
+import type Drawable from "./Objects/Drawable";
 import { World as MatterWorld, Runner } from "matter-js";
 import type World from "./World";
 
@@ -19,7 +19,7 @@ export default class Simulation {
       throw new Error("Simulation not created");
     }
     this.drawables.forEach((drawable) => {
-      MatterWorld.add(this._world.world, drawable.bodies);
+      MatterWorld.add(this._world.world, drawable.composite.bodies);
     });
     Runner.run(this.runner, this._world.engine);
   }

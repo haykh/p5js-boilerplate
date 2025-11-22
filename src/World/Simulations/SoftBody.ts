@@ -19,21 +19,27 @@ export default class SoftbodySimulation extends Simulation {
           { x: gap, y: gap },
           { x: gap, y: world.height - gap },
         ],
-        color: new Color({ r: 100, g: 200, b: 100 }),
         thickness: 5,
-        static: true,
+        color: new Color({ r: 100, g: 200, b: 100 }),
+        body_options: {
+          isStatic: true,
+        },
       }),
       new Box({
         center: { x: 300, y: 100 },
         width: 50,
         height: 50,
-        angle: Math.PI / 6,
+        body_options: {
+          angle: Math.PI / 6,
+        },
       }),
       new Box({
         center: { x: 400, y: 50 },
         width: 50,
         height: 50,
-        angle: -Math.PI / 6,
+        body_options: {
+          angle: -Math.PI / 6,
+        },
       }),
       new Polygon({
         points: [

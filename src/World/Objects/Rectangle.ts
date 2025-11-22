@@ -1,15 +1,16 @@
 import type p5 from "p5";
 import type { Vector } from "../Common";
-import { Bodies } from "matter-js";
-import { PhysicalObject, PhysicalObjectOptions } from "./Common";
+import type { DrawableOptions } from "./Drawable";
+import { Bodies, Composite } from "matter-js";
+import Drawable from "./Drawable";
 import { Color } from "../Common";
 
-interface RectangleOptions extends PhysicalObjectOptions {
+interface RectangleOptions extends DrawableOptions {
   points: Array<Vector>;
   thickness: number;
 }
 
-export default class Rectangle extends PhysicalObject {
+export default class Rectangle extends Drawable {
   private lengths: Array<number> = [];
   private thicknesses: Array<number> = [];
   public color: Color;
@@ -26,15 +27,21 @@ export default class Rectangle extends PhysicalObject {
       this.lengths.push(length);
       this.thicknesses.push(opts.thickness);
 
-      this.bodies.push(
+      const options = {
+        angle: Math.atan2(end.y - start.y, end.x - start.x),
+      };
+      if (opts.body_options) {
+        Object.assign(options, opts.body_options);
+      }
+
+      Composite.add(
+        this.composite,
         Bodies.rectangle(
           (start.x + end.x) / 2,
           (start.y + end.y) / 2,
           length,
           opts.thickness,
-          {
-            angle: Math.atan2(end.y - start.y, end.x - start.x),
-          },
+          options,
         ),
       );
     }
@@ -42,7 +49,7 @@ export default class Rectangle extends PhysicalObject {
   }
 
   draw(ctx: p5) {
-    if (this.bodies.length === 0) {
+    if (this.composite.bodies.length === 0) {
       return;
     }
     ctx.push();
@@ -51,7 +58,7 @@ export default class Rectangle extends PhysicalObject {
       ctx.noStroke();
       ctx.fill(this.color.r, this.color.g, this.color.b, this.color.a);
 
-      this.bodies.forEach((body, index) => {
+      this.composite.bodies.forEach((body, index) => {
         ctx.push();
         {
           ctx.translate(body.position.x, body.position.y);

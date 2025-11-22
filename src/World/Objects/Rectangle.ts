@@ -1,22 +1,21 @@
 import type p5 from "p5";
-import type { Coordinate } from "../Utils";
+import type { Vector } from "../Utils";
 import { Bodies } from "matter-js";
-import Drawable from "./Drawable";
+import { PhysicalObject, PhysicalObjectOptions } from "./Common";
 import { Color } from "../Utils";
 
-interface GroundOptions {
-  points: Array<Coordinate>;
+interface RectangleOptions extends PhysicalObjectOptions {
+  points: Array<Vector>;
   thickness: number;
-  color?: Color;
 }
 
-export default class Ground extends Drawable {
+export default class Rectangle extends PhysicalObject {
   private lengths: Array<number> = [];
   private thicknesses: Array<number> = [];
   public color: Color;
 
-  constructor(opts: GroundOptions) {
-    super(opts.color);
+  constructor(opts: RectangleOptions) {
+    super(opts);
 
     for (let i = 0; i < opts.points.length - 1; i++) {
       const start = opts.points[i];
@@ -34,12 +33,12 @@ export default class Ground extends Drawable {
           length,
           opts.thickness,
           {
-            isStatic: true,
             angle: Math.atan2(end.y - start.y, end.x - start.x),
           },
         ),
       );
     }
+    super.initialize();
   }
 
   draw(ctx: p5) {

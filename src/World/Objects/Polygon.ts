@@ -1,18 +1,15 @@
 import type p5 from "p5";
-import type { Coordinate } from "../Utils";
-import { Body, Bodies } from "matter-js";
-import Drawable from "./Drawable";
-import { Color } from "../Utils";
+import type { Vector } from "../Utils";
+import { Bodies } from "matter-js";
+import { PhysicalObject, PhysicalObjectOptions } from "./Common";
 
-interface PolygonOptions {
-  points: Array<Coordinate>;
-  color?: Color;
-  density?: number;
+interface PolygonOptions extends PhysicalObjectOptions {
+  points: Array<Vector>;
 }
 
-export default class Polygon extends Drawable {
+export default class Polygon extends PhysicalObject {
   constructor(opts: PolygonOptions) {
-    super(opts.color);
+    super(opts);
 
     let sumX = 0;
     let sumY = 0;
@@ -20,7 +17,7 @@ export default class Polygon extends Drawable {
       sumX += point.x;
       sumY += point.y;
     });
-    const center: Coordinate = {
+    const center: Vector = {
       x: sumX / opts.points.length,
       y: sumY / opts.points.length,
     };
@@ -31,9 +28,7 @@ export default class Polygon extends Drawable {
     }));
 
     this.bodies.push(Bodies.fromVertices(center.x, center.y, [vertices]));
-    if (opts.density !== undefined) {
-      Body.setDensity(this.bodies[0], opts.density);
-    }
+    super.initialize();
   }
 
   draw(ctx: p5) {

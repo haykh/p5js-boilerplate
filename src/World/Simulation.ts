@@ -1,5 +1,5 @@
 import type p5 from "p5";
-import type Drawable from "./Objects/Drawable";
+import type { Drawable } from "./Objects/Common";
 import { World as MatterWorld, Runner } from "matter-js";
 import type World from "./World";
 
@@ -11,7 +11,7 @@ export default class Simulation {
 
   create(world: World) {
     this._world = world;
-    this.runner = Runner.create();
+    this.runner = Runner.create({ delta: 1 });
   }
 
   start() {

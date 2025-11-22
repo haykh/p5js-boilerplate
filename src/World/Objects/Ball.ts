@@ -3,24 +3,19 @@ import type { Vector } from "../Utils";
 import { Bodies } from "matter-js";
 import { PhysicalObject, PhysicalObjectOptions } from "./Common";
 
-interface BoxOptions extends PhysicalObjectOptions {
+interface BallOptions extends PhysicalObjectOptions {
   center: Vector;
-  width: number;
-  height: number;
+  radius: number;
 }
 
-export default class Box extends PhysicalObject {
-  public width: number;
-  public height: number;
+export default class Ball extends PhysicalObject {
+  public radius: number;
 
-  constructor(opts: BoxOptions) {
+  constructor(opts: BallOptions) {
     super(opts);
-    this.width = opts.width;
-    this.height = opts.height;
+    this.radius = opts.radius;
 
-    this.bodies.push(
-      Bodies.rectangle(opts.center.x, opts.center.y, this.width, this.height),
-    );
+    this.bodies.push(Bodies.circle(opts.center.x, opts.center.y, this.radius));
     super.initialize();
   }
 
@@ -31,11 +26,9 @@ export default class Box extends PhysicalObject {
     ctx.push();
     {
       ctx.translate(this.bodies[0].position.x, this.bodies[0].position.y);
-      ctx.rotate(this.bodies[0].angle);
-      ctx.rectMode(ctx.CENTER);
       ctx.noStroke();
       ctx.fill(this.color.r, this.color.g, this.color.b, this.color.a);
-      ctx.rect(0, 0, this.width, this.height);
+      ctx.circle(0, 0, 2 * this.radius);
     }
     ctx.pop();
   }
